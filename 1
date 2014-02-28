@@ -1,0 +1,10 @@
+#!/bin/bash
+
+
+for arg in $(ls); do 	
+	if [[ "$arg" =~ [A-Za-z]+ ]]; then
+		echo "OK: "$arg
+	else echo "FUUU: "$arg
+	fi
+	
+done

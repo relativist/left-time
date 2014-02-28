@@ -1,0 +1,45 @@
+#!/bin/bash                                                                                                                                                      
+
+#GLOBAL
+HOME_TIME="20:00:00"
+
+usage()
+{
+	echo "USAGE:"
+	echo "left [-h|--help|-pic|-all|<empty>] [numeric|<empty>]"
+	echo "second argument is option. Means time to go gome, default 20"
+}
+
+if [[ $2 ]]; then
+	HOME_TIME=$2":00:00"
+fi
+
+clear
+D2=$(date +%s --date="$HOME_TIME")
+D1=$(date +%s --date="$(date +%X)")
+time_msg=$(echo  "Домой через $(date -u --date=@$((D2-D1)) +%X)")
+
+g_show(){	
+	total=$(cowsay -l | grep -v "^Cow" | sed -e "s% %\n%g" | wc -l)
+	random=$((RANDOM%$total+1))
+	random_skin=$(cowsay -l | grep -v "^Cow" | sed -e "s% %\n%g"  | grep -n .. | grep $random | awk -F: '{print $2}')
+	cowsay -f `echo "${random_skin} $time_msg"`
+}
+
+p_show(){	
+	ponysay `echo "${random_skin} $time_msg"`
+}
+
+
+
+if [[ $1 == "-cow" ]]; then
+	g_show
+elif [[ ! $1 ]]; then 
+	echo $time_msg;
+elif [[ $1 == "-pony" ]]; then 
+	p_show
+elif [[ $1 == "-all" ]]; then 
+	cowsay -l | grep -v "^Cow" | sed -e "s% %\n%g" | sed -e "s%\(.*\)%cowsay -f \1 Now I am a \1%" | sh | less 	
+elif [[ $1 == "-h" || $1 == "--help" ]]; then
+	usage
+fi
